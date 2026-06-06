@@ -24,6 +24,48 @@ auto activeNames(User[] users) {
 }
 
 writeln(activeNames(users));`,
+  },
+  {
+    id: "d-contracts-invariant",
+    language: "D",
+    aliases: ["d","dlang"],
+    difficulty: "hard",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "d",
+    confusionGroup: ["C++","Rust","Zig","Nim"],
+    discriminators: ["in contract","out contract","invariant block","D design-by-contract syntax"],
+    explanation: "This is D. This snippet uses a distinct D idiom: in contract, out contract, invariant block.",
+    code: `class Counter {
+  private int value;
+
+  void add(int delta)
+  in { assert(delta > 0); }
+  out { assert(value > 0); }
+  do { value += delta; }
+
+  invariant { assert(value >= 0); }
+}`,
+  },
+  {
+    id: "d-mixin-template",
+    language: "D",
+    aliases: ["d","dlang"],
+    difficulty: "hard",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "d",
+    confusionGroup: ["C++","Rust","Zig","Nim"],
+    discriminators: ["mixin template","alias this","D template metaprogramming","compile-time code injection"],
+    explanation: "This is D. This snippet uses a distinct D idiom: mixin template, alias this, D template metaprogramming.",
+    code: `mixin template IdField() {
+  string id;
+  alias id this;
+}
+
+struct Customer {
+  mixin IdField;
+}`,
   }
 ];
 

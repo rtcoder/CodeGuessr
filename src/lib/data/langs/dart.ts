@@ -20,6 +20,44 @@ const dart: CodeQuestion[] = [
     ];
   }
 }`,
+  },
+  {
+    id: "dart-sealed-switch",
+    language: "Dart",
+    aliases: ["dart"],
+    difficulty: "medium",
+    category: "popular",
+    quizSuitability: "excellent",
+    highlightLanguage: "dart",
+    confusionGroup: ["JavaScript","TypeScript","Kotlin","Swift"],
+    discriminators: ["sealed class","factory constructors","switch expression","pattern matching cases"],
+    explanation: "This is Dart. This snippet uses a distinct Dart idiom: sealed class, factory constructors, switch expression.",
+    code: `sealed class JobState {}
+class Queued extends JobState { const Queued(this.id); final String id; }
+class Failed extends JobState { const Failed(this.reason); final String reason; }
+
+String label(JobState state) => switch (state) {
+  Queued(:final id) => "queued:$id",
+  Failed(:final reason) => "failed:$reason",
+};`,
+  },
+  {
+    id: "dart-stream-yield",
+    language: "Dart",
+    aliases: ["dart"],
+    difficulty: "medium",
+    category: "popular",
+    quizSuitability: "excellent",
+    highlightLanguage: "dart",
+    confusionGroup: ["JavaScript","TypeScript","Kotlin","Swift"],
+    discriminators: ["async* generator","Stream<T>","yield keyword","await for loop"],
+    explanation: "This is Dart. This snippet uses a distinct Dart idiom: async* generator, Stream<T>, yield keyword.",
+    code: `Stream<int> retryDelays(int attempts) async* {
+  for (var i = 0; i < attempts; i++) {
+    await Future<void>.delayed(Duration(milliseconds: 20));
+    yield 1 << i;
+  }
+}`,
   }
 ];
 

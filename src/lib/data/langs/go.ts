@@ -51,6 +51,32 @@ func fetchWithTimeout(done <-chan string) string {
 
     return io.ReadAll(file)
 }`,
+  },
+  {
+    id: "go-interface-embedding",
+    language: "Go",
+    aliases: ["go","golang"],
+    difficulty: "medium",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "go",
+    confusionGroup: ["Rust","Java","C","Kotlin"],
+    discriminators: ["interface embedding","struct method receiver","fmt.Sprintf","capitalized exported names"],
+    explanation: "This is Go. This snippet uses a distinct Go idiom: interface embedding, struct method receiver, fmt.Sprintf.",
+    code: `package billing
+
+import "fmt"
+
+type Store interface {
+    Reader
+    Save(id string) error
+}
+
+type Reader interface { Load(id string) (string, error) }
+
+func Key(prefix, id string) string {
+    return fmt.Sprintf("%s:%s", prefix, id)
+}`,
   }
 ];
 

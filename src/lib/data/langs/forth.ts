@@ -17,6 +17,38 @@ const forth: CodeQuestion[] = [
   square swap square + ;
 
 3 4 hypotenuse-squared .`,
+  },
+  {
+    id: "forth-do-loop",
+    language: "Forth",
+    aliases: ["forth"],
+    difficulty: "insane",
+    category: "esoteric",
+    quizSuitability: "excellent",
+    highlightLanguage: "forth",
+    confusionGroup: ["PostScript","Factor","Joy","Assembly"],
+    discriminators: ["DO LOOP construct","colon definition","stack comments","postfix arithmetic"],
+    explanation: "This is Forth. This snippet uses a distinct Forth idiom: DO LOOP construct, colon definition, stack comments.",
+    code: `: squares ( n -- )
+  0 DO I I * . LOOP ;`,
+  },
+  {
+    id: "forth-variables",
+    language: "Forth",
+    aliases: ["forth"],
+    difficulty: "insane",
+    category: "esoteric",
+    quizSuitability: "excellent",
+    highlightLanguage: "forth",
+    confusionGroup: ["PostScript","Factor","Joy","Assembly"],
+    discriminators: ["VARIABLE word","! store operator","@ fetch operator","stack-based mutation"],
+    explanation: "This is Forth. This snippet uses a distinct Forth idiom: VARIABLE word, ! store operator, @ fetch operator.",
+    code: `VARIABLE counter
+
+: inc ( -- )
+  counter @ 1 + counter ! ;
+
+: show ( -- ) counter @ . ;`,
   }
 ];
 

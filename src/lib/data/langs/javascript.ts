@@ -21,6 +21,42 @@ export async function loadUsers(paths) {
     .filter(({ active }) => active)
     .map(({ name }) => name);
 }`,
+  },
+  {
+    id: "javascript-proxy-reflect",
+    language: "JavaScript",
+    aliases: ["javascript","js","node","nodejs","node.js","ecmascript"],
+    difficulty: "easy",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "javascript",
+    confusionGroup: ["TypeScript","PHP","Lua","Dart"],
+    discriminators: ["Proxy object","Reflect.get","dynamic property trap","export const"],
+    explanation: "This is JavaScript. This snippet uses a distinct JavaScript idiom: Proxy object, Reflect.get, dynamic property trap.",
+    code: `export const tracked = (target, log) => new Proxy(target, {
+  get(object, property, receiver) {
+    log.push(String(property));
+    return Reflect.get(object, property, receiver);
+  }
+});`,
+  },
+  {
+    id: "javascript-generator-destructuring",
+    language: "JavaScript",
+    aliases: ["javascript","js","node","nodejs","node.js","ecmascript"],
+    difficulty: "easy",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "javascript",
+    confusionGroup: ["TypeScript","PHP","Lua","Dart"],
+    discriminators: ["function* generator","yield keyword","object destructuring defaults","for...of loop"],
+    explanation: "This is JavaScript. This snippet uses a distinct JavaScript idiom: function* generator, yield keyword, object destructuring defaults.",
+    code: `function* pages(response) {
+  for (const { items = [], next } of response.links) {
+    yield* items;
+    if (!next) return;
+  }
+}`,
   }
 ];
 

@@ -38,6 +38,7 @@ import kotlin from './kotlin';
 import lua from './lua';
 import make from './make';
 import matlab from './matlab';
+import nim from './nim';
 import nix from './nix';
 import objectiveC from './objective-c';
 import ocaml from './ocaml';
@@ -111,6 +112,7 @@ export const questions = [
   ...lua,
   ...make,
   ...matlab,
+  ...nim,
   ...nix,
   ...objectiveC,
   ...ocaml,

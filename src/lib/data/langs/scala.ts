@@ -42,6 +42,25 @@ given Encoder[User] with
 extension [A](value: A)
   def asJson(using encoder: Encoder[A]): String =
     encoder.encode(value)`,
+  },
+  {
+    id: "scala-opaque-type",
+    language: "Scala",
+    aliases: ["scala"],
+    difficulty: "hard",
+    category: "functional",
+    quizSuitability: "excellent",
+    highlightLanguage: "scala",
+    confusionGroup: ["Kotlin","Haskell","F#","Java"],
+    discriminators: ["opaque type","companion object","extension method","Scala 3 syntax"],
+    explanation: "This is Scala. This snippet uses a distinct Scala idiom: opaque type, companion object, extension method.",
+    code: `opaque type UserId = String
+
+object UserId:
+  def apply(value: String): UserId = value
+
+extension (id: UserId)
+  def key: String = s"user:$id"`,
   }
 ];
 

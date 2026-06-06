@@ -28,6 +28,48 @@ active_names :: proc(users: []User) -> []string {
     }
     return names[:]
 }`,
+  },
+  {
+    id: "odin-defer-context",
+    language: "Odin",
+    aliases: ["odin"],
+    difficulty: "hard",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "odin",
+    confusionGroup: ["Zig","Go","C","V"],
+    discriminators: ["defer statement","context allocator","make dynamic array","append procedure"],
+    explanation: "This is Odin. This snippet uses a distinct Odin idiom: defer statement, context allocator, make dynamic array.",
+    code: `package demo
+
+main :: proc() {
+  values := make([dynamic]int)
+  defer delete(values)
+
+  append(&values, 1)
+  append(&values, 2)
+}`,
+  },
+  {
+    id: "odin-distinct-union",
+    language: "Odin",
+    aliases: ["odin"],
+    difficulty: "hard",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "odin",
+    confusionGroup: ["Zig","Go","C","V"],
+    discriminators: ["distinct type","union declaration","switch over union","case syntax"],
+    explanation: "This is Odin. This snippet uses a distinct Odin idiom: distinct type, union declaration, switch over union.",
+    code: `package demo
+
+Event :: union {
+  Click,
+  Key,
+}
+
+Click :: struct {x, y: int}
+Key :: struct {code: string}`,
   }
 ];
 

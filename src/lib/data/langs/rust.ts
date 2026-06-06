@@ -40,6 +40,26 @@ fn load_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
     let config = serde_json::from_str::<Config>(&contents)?;
     Ok(config)
 }`,
+  },
+  {
+    id: "rust-trait-impl-result",
+    language: "Rust",
+    aliases: ["rust","rs"],
+    difficulty: "medium",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "rust",
+    confusionGroup: ["Go","Swift","C++","Haskell"],
+    discriminators: ["trait declaration","impl block","Result<T, E>","question-mark error propagation"],
+    explanation: "This is Rust. This snippet uses a distinct Rust idiom: trait declaration, impl block, Result<T, E>.",
+    code: `trait Loader {
+    fn load(&self, id: &str) -> Result<String, std::io::Error>;
+}
+
+fn title(loader: &impl Loader, id: &str) -> Result<String, std::io::Error> {
+    let raw = loader.load(id)?;
+    Ok(raw.trim().to_owned())
+}`,
   }
 ];
 

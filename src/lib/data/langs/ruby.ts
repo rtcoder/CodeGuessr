@@ -40,6 +40,26 @@ puts active_names.join(", ")`,
     nil
   end
 end`,
+  },
+  {
+    id: "ruby-pattern-matching",
+    language: "Ruby",
+    aliases: ["ruby","rb"],
+    difficulty: "easy",
+    category: "scripting",
+    quizSuitability: "excellent",
+    highlightLanguage: "ruby",
+    confusionGroup: ["Python","Perl","Crystal","Elixir"],
+    discriminators: ["case/in pattern matching","hash pattern","keyword-style hash keys","string interpolation"],
+    explanation: "This is Ruby. This snippet uses a distinct Ruby idiom: case/in pattern matching, hash pattern, keyword-style hash keys.",
+    code: `def route(event)
+  case event
+  in {type: "invoice.paid", data: {id: id}}
+    "receipt:#{id}"
+  in {type: type}
+    "ignored:#{type}"
+  end
+end`,
   }
 ];
 

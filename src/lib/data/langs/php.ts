@@ -47,6 +47,33 @@ $tier = match ($user?->plan()) {
 };
 
 echo $tier["limit"];`,
+  },
+  {
+    id: "php-enum-match",
+    language: "PHP",
+    aliases: ["php"],
+    difficulty: "medium",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "php",
+    confusionGroup: ["Hack","JavaScript","Ruby","C#"],
+    discriminators: ["enum declaration","match expression","case labels","method inside enum"],
+    explanation: "This is PHP. This snippet uses a distinct PHP idiom: enum declaration, match expression, case labels.",
+    code: `<?php
+
+enum InvoiceStatus: string
+{
+    case Draft = "draft";
+    case Paid = "paid";
+
+    public function canSendReceipt(): bool
+    {
+        return match ($this) {
+            self::Paid => true,
+            self::Draft => false,
+        };
+    }
+}`,
   }
 ];
 

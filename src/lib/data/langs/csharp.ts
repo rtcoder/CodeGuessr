@@ -43,6 +43,26 @@ public async Task<UserDto?> LoadUserAsync(Guid id)
         .Select(user => new UserDto(user.Id, user.Email))
         .SingleOrDefaultAsync();
 }`,
+  },
+  {
+    id: "csharp-record-pattern",
+    language: "C#",
+    aliases: ["c#","csharp","cs","c-sharp"],
+    difficulty: "medium",
+    category: "popular",
+    quizSuitability: "excellent",
+    highlightLanguage: "csharp",
+    confusionGroup: ["Java","Kotlin","TypeScript","F#"],
+    discriminators: ["record type","switch expression","property pattern","nullable reference marker"],
+    explanation: "This is C#. This snippet uses a distinct C# idiom: record type, switch expression, property pattern.",
+    code: `public sealed record Payment(string Id, decimal Amount, string? Currency);
+
+public static string Label(Payment payment) => payment switch
+{
+    { Currency: null } => "missing currency",
+    { Amount: > 1000m } big => $"large:{big.Id}",
+    _ => "standard"
+};`,
   }
 ];
 

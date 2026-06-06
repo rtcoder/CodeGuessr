@@ -50,6 +50,28 @@ final class ProfileViewModel: ObservableObject {
         }
     }
 }`,
+  },
+  {
+    id: "swift-async-actor",
+    language: "Swift",
+    aliases: ["swift"],
+    difficulty: "medium",
+    category: "popular",
+    quizSuitability: "excellent",
+    highlightLanguage: "swift",
+    confusionGroup: ["Kotlin","Rust","Objective-C","TypeScript"],
+    discriminators: ["actor declaration","async method","await keyword","isolated mutable state"],
+    explanation: "This is Swift. This snippet uses a distinct Swift idiom: actor declaration, async method, await keyword.",
+    code: `actor ImageCache {
+    private var storage: [URL: Data] = [:]
+
+    func data(for url: URL) async throws -> Data {
+        if let cached = storage[url] { return cached }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        storage[url] = data
+        return data
+    }
+}`,
   }
 ];
 

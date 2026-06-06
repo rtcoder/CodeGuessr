@@ -33,6 +33,49 @@ begin
 end;
 
 end.`,
+  },
+  {
+    id: "delphi-property-setter",
+    language: "Delphi/Object Pascal",
+    aliases: ["delphi","object pascal","delphi/object pascal"],
+    difficulty: "hard",
+    category: "legacy",
+    quizSuitability: "excellent",
+    highlightLanguage: "pascal",
+    confusionGroup: ["Pascal","Ada","Visual Basic .NET","C#"],
+    discriminators: ["property declaration","read/write accessors","procedure setter","class private/public sections"],
+    explanation: "This is Delphi/Object Pascal. This snippet uses a distinct Delphi/Object Pascal idiom: property declaration, read/write accessors, procedure setter.",
+    code: `type
+  TCounter = class
+  private
+    FValue: Integer;
+    procedure SetValue(AValue: Integer);
+  public
+    property Value: Integer read FValue write SetValue;
+  end;`,
+  },
+  {
+    id: "delphi-generic-list",
+    language: "Delphi/Object Pascal",
+    aliases: ["delphi","object pascal","delphi/object pascal"],
+    difficulty: "hard",
+    category: "legacy",
+    quizSuitability: "excellent",
+    highlightLanguage: "pascal",
+    confusionGroup: ["Pascal","Ada","Visual Basic .NET","C#"],
+    discriminators: ["Generics.Collections unit","TList<T>","try/finally","Free call"],
+    explanation: "This is Delphi/Object Pascal. This snippet uses a distinct Delphi/Object Pascal idiom: Generics.Collections unit, TList<T>, try/finally.",
+    code: `uses System.Generics.Collections;
+
+var Names: TList<string>;
+begin
+  Names := TList<string>.Create;
+  try
+    Names.Add('Ada');
+  finally
+    Names.Free;
+  end;
+end;`,
   }
 ];
 

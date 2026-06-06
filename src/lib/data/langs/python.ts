@@ -48,6 +48,28 @@ def read_titles(folder: Path) -> list[str]:
 
     with files[0].open(encoding="utf-8") as handle:
         return [line.strip("# \\n") for line in handle if line.startswith("# ")]`,
+  },
+  {
+    id: "python-async-contextmanager",
+    language: "Python",
+    aliases: ["python","py","python3"],
+    difficulty: "easy",
+    category: "popular",
+    quizSuitability: "excellent",
+    highlightLanguage: "python",
+    confusionGroup: ["Ruby","Julia","JavaScript","Lua"],
+    discriminators: ["async def","async with","contextlib.asynccontextmanager","yield inside context manager"],
+    explanation: "This is Python. This snippet uses a distinct Python idiom: async def, async with, contextlib.asynccontextmanager.",
+    code: `from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def transaction(pool):
+    conn = await pool.acquire()
+    try:
+        yield conn
+        await conn.commit()
+    finally:
+        await pool.release(conn)`,
   }
 ];
 

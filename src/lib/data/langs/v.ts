@@ -27,6 +27,49 @@ config := read_config('app.toml') or {
     eprintln(err)
     return
 }`,
+  },
+  {
+    id: "v-comptime-generic",
+    language: "V",
+    aliases: ["v","vlang"],
+    difficulty: "hard",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "v",
+    confusionGroup: ["Go","Rust","Zig","Nim"],
+    discriminators: ["generic function with [T]","comptime type parameter","array append syntax","fn declaration"],
+    explanation: "This is V. This snippet uses a distinct V idiom: generic function with [T], comptime type parameter, array append syntax.",
+    code: `fn keep_even[T](values []T, predicate fn (T) bool) []T {
+  mut out := []T{}
+  for value in values {
+    if predicate(value) {
+      out << value
+    }
+  }
+  return out
+}`,
+  },
+  {
+    id: "v-sumtype-match",
+    language: "V",
+    aliases: ["v","vlang"],
+    difficulty: "hard",
+    category: "systems",
+    quizSuitability: "excellent",
+    highlightLanguage: "v",
+    confusionGroup: ["Go","Rust","Zig","Nim"],
+    discriminators: ["sum type alias","match expression","struct literals","or error propagation"],
+    explanation: "This is V. This snippet uses a distinct V idiom: sum type alias, match expression, struct literals.",
+    code: `struct Click { x int y int }
+struct Key { code string }
+type Event = Click | Key
+
+fn label(event Event) string {
+  return match event {
+    Click { "click:\${event.x},\${event.y}" }
+    Key { "key:\${event.code}" }
+  }
+}`,
   }
 ];
 

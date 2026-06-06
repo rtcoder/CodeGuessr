@@ -153,6 +153,25 @@ for (const question of questions) {
   languageCounts.set(question.language, (languageCounts.get(question.language) ?? 0) + 1);
 }
 
+for (const [language, count] of languageCounts) {
+  if (count !== 3) {
+    errors.push(`${language}: expected exactly 3 snippets, found ${count}`);
+  }
+}
+
+for (const [language, entries] of groupByLanguage(questions)) {
+  for (let i = 0; i < entries.length; i += 1) {
+    for (let j = i + 1; j < entries.length; j += 1) {
+      const similarity = codeSimilarity(entries[i].code, entries[j].code);
+      if (similarity > 0.65) {
+        errors.push(
+          `${language}: snippets "${entries[i].id}" and "${entries[j].id}" are too similar (${similarity.toFixed(2)})`
+        );
+      }
+    }
+  }
+}
+
 const multiSnippetLanguages = Array.from(languageCounts.entries()).filter(([, count]) => count > 1).length;
 
 console.log(`Validated ${questions.length} snippets across ${languageCounts.size} languages.`);
@@ -181,4 +200,39 @@ function normalize(value) {
     .toLowerCase()
     .replace(/\s+/g, ' ')
     .replace(/[._]/g, '');
+}
+
+function groupByLanguage(entries) {
+  const groups = new Map();
+  for (const entry of entries) {
+    const values = groups.get(entry.language) ?? [];
+    values.push(entry);
+    groups.set(entry.language, values);
+  }
+  return groups;
+}
+
+function codeSimilarity(leftCode, rightCode) {
+  const left = codeTokens(leftCode);
+  const right = codeTokens(rightCode);
+  let overlap = 0;
+
+  for (const token of left) {
+    if (right.has(token)) {
+      overlap += 1;
+    }
+  }
+
+  return overlap / Math.max(left.size, right.size, 1);
+}
+
+function codeTokens(code) {
+  return new Set(
+    code
+      .toLowerCase()
+      .replace(/(["'`])[\s\S]*?\1/g, ' ')
+      .replace(/[^a-z0-9_#]+/g, ' ')
+      .split(/\s+/)
+      .filter((token) => token.length > 2)
+  );
 }

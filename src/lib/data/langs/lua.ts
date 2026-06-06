@@ -28,6 +28,49 @@ function UserList:active_names()
   end
   return names
 end`,
+  },
+  {
+    id: "lua-coroutine-yield",
+    language: "Lua",
+    aliases: ["lua"],
+    difficulty: "medium",
+    category: "scripting",
+    quizSuitability: "excellent",
+    highlightLanguage: "lua",
+    confusionGroup: ["Python","Ruby","JavaScript","Perl"],
+    discriminators: ["coroutine.create","coroutine.yield","anonymous function","repeat-style resume workflow"],
+    explanation: "This is Lua. This snippet uses a distinct Lua idiom: coroutine.create, coroutine.yield, anonymous function.",
+    code: `local worker = coroutine.create(function(limit)
+  for i = 1, limit do
+    coroutine.yield(i * i)
+  end
+end)
+
+local ok, value = coroutine.resume(worker, 3)`,
+  },
+  {
+    id: "lua-module-return-table",
+    language: "Lua",
+    aliases: ["lua"],
+    difficulty: "medium",
+    category: "scripting",
+    quizSuitability: "excellent",
+    highlightLanguage: "lua",
+    confusionGroup: ["Python","Ruby","JavaScript","Perl"],
+    discriminators: ["module table return","local table literal","colon method definition","self parameter sugar"],
+    explanation: "This is Lua. This snippet uses a distinct Lua idiom: module table return, local table literal, colon method definition.",
+    code: `local Queue = {}
+Queue.__index = Queue
+
+function Queue:new()
+  return setmetatable({items = {}}, self)
+end
+
+function Queue:push(item)
+  table.insert(self.items, item)
+end
+
+return Queue`,
   }
 ];
 

@@ -25,6 +25,48 @@ class Labels {
     }
   }
 }`,
+  },
+  {
+    id: "haxe-abstract-type",
+    language: "Haxe",
+    aliases: ["haxe","hx"],
+    difficulty: "hard",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "haxe",
+    confusionGroup: ["ActionScript","TypeScript","JavaScript","Dart"],
+    discriminators: ["abstract type","from/to conversion","inline function","Haxe metadata-like syntax"],
+    explanation: "This is Haxe. This snippet uses a distinct Haxe idiom: abstract type, from/to conversion, inline function.",
+    code: `abstract UserId(String) from String to String {
+  public inline function key():String {
+    return "user:" + this;
+  }
+}`,
+  },
+  {
+    id: "haxe-enum-pattern",
+    language: "Haxe",
+    aliases: ["haxe","hx"],
+    difficulty: "hard",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "haxe",
+    confusionGroup: ["ActionScript","TypeScript","JavaScript","Dart"],
+    discriminators: ["enum declaration","switch over enum","case with payload","static function"],
+    explanation: "This is Haxe. This snippet uses a distinct Haxe idiom: enum declaration, switch over enum, case with payload.",
+    code: `enum Result<T> {
+  Ok(value:T);
+  Error(message:String);
+}
+
+class Render {
+  static function label(result:Result<Int>):String {
+    return switch result {
+      case Ok(value): Std.string(value);
+      case Error(message): message;
+    }
+  }
+}`,
   }
 ];
 

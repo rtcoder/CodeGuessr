@@ -26,6 +26,45 @@ package body Workers is
       end Start;
    end Runner;
 end Workers;`,
+  },
+  {
+    id: "ada-protected-object",
+    language: "Ada",
+    aliases: ["ada"],
+    difficulty: "hard",
+    category: "legacy",
+    quizSuitability: "excellent",
+    highlightLanguage: "ada",
+    confusionGroup: ["Pascal","Delphi/Object Pascal","Fortran","COBOL"],
+    discriminators: ["protected type","entry barrier","procedure body","Ada rendezvous-style synchronization"],
+    explanation: "This is Ada. This snippet uses a distinct Ada idiom: protected type, entry barrier, procedure body.",
+    code: `protected type Mailbox is
+  entry Take(Item : out Integer) when Ready;
+  procedure Put(Item : in Integer);
+private
+  Value : Integer := 0;
+  Ready : Boolean := False;
+end Mailbox;`,
+  },
+  {
+    id: "ada-generic-package",
+    language: "Ada",
+    aliases: ["ada"],
+    difficulty: "hard",
+    category: "legacy",
+    quizSuitability: "excellent",
+    highlightLanguage: "ada",
+    confusionGroup: ["Pascal","Delphi/Object Pascal","Fortran","COBOL"],
+    discriminators: ["generic package","formal type parameter","package instantiation","Ada strong typing"],
+    explanation: "This is Ada. This snippet uses a distinct Ada idiom: generic package, formal type parameter, package instantiation.",
+    code: `generic
+  type Element is private;
+package Stacks is
+  procedure Push(Item : Element);
+  function Pop return Element;
+end Stacks;
+
+package Integer_Stacks is new Stacks(Integer);`,
   }
 ];
 

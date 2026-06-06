@@ -29,6 +29,46 @@ begin
   if Current.Active then
     writeln(Current.Name);
 end.`,
+  },
+  {
+    id: "pascal-set-type",
+    language: "Pascal",
+    aliases: ["pascal"],
+    difficulty: "hard",
+    category: "legacy",
+    quizSuitability: "excellent",
+    highlightLanguage: "pascal",
+    confusionGroup: ["Delphi/Object Pascal","Ada","BASIC","Modula-2"],
+    discriminators: ["set of enum","include procedure","in operator","Pascal type block"],
+    explanation: "This is Pascal. This snippet uses a distinct Pascal idiom: set of enum, include procedure, in operator.",
+    code: `type
+  TPermission = (ReadAccess, WriteAccess, ExecuteAccess);
+  TPermissions = set of TPermission;
+
+var Rights: TPermissions;
+begin
+  Rights := [ReadAccess];
+  Include(Rights, WriteAccess);
+end.`,
+  },
+  {
+    id: "pascal-procedure-var-param",
+    language: "Pascal",
+    aliases: ["pascal"],
+    difficulty: "hard",
+    category: "legacy",
+    quizSuitability: "excellent",
+    highlightLanguage: "pascal",
+    confusionGroup: ["Delphi/Object Pascal","Ada","BASIC","Modula-2"],
+    discriminators: ["procedure declaration","var parameter","array indexing","for loop"],
+    explanation: "This is Pascal. This snippet uses a distinct Pascal idiom: procedure declaration, var parameter, array indexing.",
+    code: `procedure Swap(var A, B: Integer);
+var Temp: Integer;
+begin
+  Temp := A;
+  A := B;
+  B := Temp;
+end;`,
   }
 ];
 

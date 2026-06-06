@@ -25,6 +25,49 @@ async function active_names(vec<UserRow> $users): Awaitable<vec<string>> {
     $user ==> $user['name'],
   );
 }`,
+  },
+  {
+    id: "hack-xhp-component",
+    language: "Hack",
+    aliases: ["hack","hacklang"],
+    difficulty: "hard",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "php",
+    confusionGroup: ["PHP","TypeScript","JavaScript","Flow"],
+    discriminators: ["<?hh opening tag","XHP class syntax","attribute declaration","children declaration"],
+    explanation: "This is Hack. This snippet uses a distinct Hack idiom: <?hh opening tag, XHP class syntax, attribute declaration.",
+    code: `<?hh
+
+final xhp class ui:badge extends :x:element {
+  attribute string label @required;
+  children empty;
+
+  protected async function renderAsync(): Awaitable<:span> {
+    return <span class="badge">{$this->:label}</span>;
+  }
+}`,
+  },
+  {
+    id: "hack-dict-keyset",
+    language: "Hack",
+    aliases: ["hack","hacklang"],
+    difficulty: "hard",
+    category: "web",
+    quizSuitability: "excellent",
+    highlightLanguage: "php",
+    confusionGroup: ["PHP","TypeScript","JavaScript","Flow"],
+    discriminators: ["dict collection","keyset collection","Hack generics","vec pipeline-style collection literals"],
+    explanation: "This is Hack. This snippet uses a distinct Hack idiom: dict collection, keyset collection, Hack generics.",
+    code: `<?hh
+
+function index_by_id(vec<shape("id" => string, "role" => string)> $rows): dict<string, string> {
+  $roles = dict[];
+  foreach ($rows as $row) {
+    $roles[$row["id"]] = $row["role"];
+  }
+  return $roles;
+}`,
   }
 ];
 

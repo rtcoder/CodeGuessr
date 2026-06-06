@@ -42,6 +42,23 @@ fun label(event: PaymentEvent): String =
         emit(label)
     }
 }`,
+  },
+  {
+    id: "kotlin-delegated-property",
+    language: "Kotlin",
+    aliases: ["kotlin","kt"],
+    difficulty: "medium",
+    category: "popular",
+    quizSuitability: "excellent",
+    highlightLanguage: "kotlin",
+    confusionGroup: ["Java","Scala","Swift","C#"],
+    discriminators: ["by lazy delegated property","object expression","override fun","Kotlin property syntax"],
+    explanation: "This is Kotlin. This snippet uses a distinct Kotlin idiom: by lazy delegated property, object expression, override fun.",
+    code: `val client by lazy {
+    object : Closeable {
+        override fun close() { println("closed") }
+    }
+}`,
   }
 ];
 
