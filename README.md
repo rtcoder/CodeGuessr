@@ -24,3 +24,7 @@ npm run dev
 npm run check
 npm run build
 ```
+
+## GitHub Pages
+
+The app is configured for static GitHub Pages deployment. The workflow in `.github/workflows/pages.yml` runs on pushes to `main`, checks the project, builds with `BASE_PATH=/<repo-name>`, and deploys the generated `build/` directory.
