@@ -26,6 +26,7 @@ const plannedDistractors = new Set([
   'C++',
   'Coq/Rocq',
   'Crystal',
+  'Dart',
   'Datalog',
   'Elm',
   'Erlang',

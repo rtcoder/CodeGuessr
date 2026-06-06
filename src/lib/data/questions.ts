@@ -364,5 +364,237 @@ Next ==
 
 Spec == Init /\\ [][Next]_count
 ====`
+  },
+  {
+    id: 'csharp-async-nullable-record',
+    language: 'C#',
+    aliases: ['c#', 'csharp', 'cs', 'c-sharp'],
+    difficulty: 'medium',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'csharp',
+    confusionGroup: ['Java', 'Kotlin', 'TypeScript', 'F#'],
+    discriminators: ['record declaration', 'async Task<T>', 'nullable reference type', 'await using'],
+    explanation:
+      'This is C#. record syntax, async Task<T>, nullable reference types, and await using are modern C# fingerprints.',
+    code: `public sealed record UserDto(Guid Id, string? Email);
+
+public async Task<UserDto?> LoadUserAsync(Guid id)
+{
+    await using var db = await factory.CreateDbContextAsync();
+    return await db.Users
+        .Where(user => user.Id == id)
+        .Select(user => new UserDto(user.Id, user.Email))
+        .SingleOrDefaultAsync();
+}`
+  },
+  {
+    id: 'rust-result-question-mark',
+    language: 'Rust',
+    aliases: ['rust', 'rs'],
+    difficulty: 'medium',
+    category: 'systems',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'rust',
+    confusionGroup: ['Go', 'C++', 'Zig', 'Swift'],
+    discriminators: ['use std::fs', 'Result<T, E>', '? error propagation', 'serde_json::from_str'],
+    explanation:
+      'This is Rust. Result return types, borrowed &str parameters, the ? operator, and crate-style paths like serde_json::from_str identify it.',
+    code: `use std::fs;
+
+fn load_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
+    let contents = fs::read_to_string(path)?;
+    let config = serde_json::from_str::<Config>(&contents)?;
+    Ok(config)
+}`
+  },
+  {
+    id: 'go-error-handling-defer',
+    language: 'Go',
+    aliases: ['go', 'golang'],
+    difficulty: 'medium',
+    category: 'systems',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'go',
+    confusionGroup: ['Rust', 'C', 'Zig', 'Java'],
+    discriminators: ['func declaration', 'multiple return values', 'err != nil', 'defer file.Close()', ':= short declaration'],
+    explanation:
+      'This is Go. Multiple return values, explicit err != nil checks, defer, and := short declarations are classic Go fingerprints.',
+    code: `func readConfig(path string) ([]byte, error) {
+    file, err := os.Open(path)
+    if err != nil {
+        return nil, err
+    }
+    defer file.Close()
+
+    return io.ReadAll(file)
+}`
+  },
+  {
+    id: 'kotlin-coroutine-flow',
+    language: 'Kotlin',
+    aliases: ['kotlin', 'kt'],
+    difficulty: 'medium',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'kotlin',
+    confusionGroup: ['Java', 'Scala', 'Swift', 'C#'],
+    discriminators: ['suspend function', 'Flow<T>', 'emit', 'when expression', 'string interpolation'],
+    explanation:
+      'This is Kotlin. suspend functions, Flow, emit, when expressions, and $ interpolation separate it from Java and Scala.',
+    code: `suspend fun streamLabels(events: Flow<Event>): Flow<String> = flow {
+    events.collect { event ->
+        val label = when (event) {
+            is Event.Created -> "created:\${event.id}"
+            is Event.Deleted -> "deleted:\${event.id}"
+        }
+        emit(label)
+    }
+}`
+  },
+  {
+    id: 'swift-property-wrapper-task',
+    language: 'Swift',
+    aliases: ['swift'],
+    difficulty: 'medium',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'swift',
+    confusionGroup: ['Kotlin', 'Rust', 'Objective-C', 'Dart'],
+    discriminators: ['@MainActor attribute', '@Published property wrapper', 'async/await', 'Task closure'],
+    explanation:
+      'This is Swift. @MainActor, @Published, Task, async/await, and backslash-parentheses interpolation are Swift fingerprints.',
+    code: `@MainActor
+final class ProfileViewModel: ObservableObject {
+    @Published private(set) var title = "Loading"
+
+    func refresh() {
+        Task {
+            let user = try await service.currentUser()
+            title = "\\(user.name) · \\(user.plan)"
+        }
+    }
+}`
+  },
+  {
+    id: 'ruby-pattern-match-case-in',
+    language: 'Ruby',
+    aliases: ['ruby', 'rb'],
+    difficulty: 'medium',
+    category: 'scripting',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'ruby',
+    confusionGroup: ['Python', 'Elixir', 'Crystal', 'Perl'],
+    discriminators: ['case/in pattern matching', 'hash symbols', 'then expression', 'nil fallback'],
+    explanation:
+      'This is Ruby. The case/in pattern matching syntax, symbol keys, then branches, and nil fallback point to modern Ruby.',
+    code: `def label(event)
+  case event
+  in { type: :created, user: { name: } }
+    "created by #{name}"
+  in { type: :deleted, id: }
+    "deleted #{id}"
+  else
+    nil
+  end
+end`
+  },
+  {
+    id: 'python-pathlib-comprehension',
+    language: 'Python',
+    aliases: ['python', 'py', 'python3'],
+    difficulty: 'easy',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'python',
+    confusionGroup: ['Ruby', 'Julia', 'Nim', 'Lua'],
+    discriminators: ['from pathlib import Path', 'list comprehension', 'with context manager', 'indentation-based block'],
+    explanation:
+      'This is Python. pathlib imports, list comprehensions, with blocks, and indentation-based structure identify it clearly.',
+    code: `from pathlib import Path
+
+def read_titles(folder: Path) -> list[str]:
+    files = [
+        path
+        for path in folder.glob("*.md")
+        if path.is_file()
+    ]
+
+    with files[0].open(encoding="utf-8") as handle:
+        return [line.strip("# \\n") for line in handle if line.startswith("# ")]`
+  },
+  {
+    id: 'typescript-generic-type-guard',
+    language: 'TypeScript',
+    aliases: ['typescript', 'ts'],
+    difficulty: 'medium',
+    category: 'web',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'typescript',
+    confusionGroup: ['JavaScript', 'Flow', 'C#', 'Kotlin'],
+    discriminators: ['generic function', 'keyof type operator', 'type guard return', 'unknown type'],
+    explanation:
+      'This is TypeScript. keyof, unknown, generic constraints, and a value is T type predicate are TypeScript-only clues.',
+    code: `type FeatureFlags = {
+  betaCheckout: boolean;
+  darkMode: boolean;
+};
+
+function hasFlag<T extends object>(value: T, key: keyof T): key is keyof T {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
+export function isEnabled(flags: FeatureFlags, name: unknown) {
+  return typeof name === "string" && hasFlag(flags, name) && flags[name];
+}`
+  },
+  {
+    id: 'php-attributes-constructor-promotion',
+    language: 'PHP',
+    aliases: ['php'],
+    difficulty: 'medium',
+    category: 'web',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'php',
+    confusionGroup: ['Hack', 'JavaScript', 'Ruby', 'C#'],
+    discriminators: ['PHP attribute syntax', 'constructor property promotion', 'readonly property', 'named class method'],
+    explanation:
+      'This is PHP. #[...] attributes, constructor property promotion, readonly properties, and $ variables are modern PHP fingerprints.',
+    code: `<?php
+
+#[Route("/invoices/{id}", methods: ["GET"])]
+final class ShowInvoice
+{
+    public function __construct(
+        private readonly InvoiceRepository $invoices,
+    ) {}
+
+    public function __invoke(string $id): Response
+    {
+        return new JsonResponse($this->invoices->find($id));
+    }
+}`
+  },
+  {
+    id: 'scala-given-extension',
+    language: 'Scala',
+    aliases: ['scala'],
+    difficulty: 'hard',
+    category: 'functional',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'scala',
+    confusionGroup: ['Kotlin', 'Haskell', 'F#', 'Java'],
+    discriminators: ['given instance', 'extension method', 'using parameter', 'Scala 3 indentation syntax'],
+    explanation:
+      'This is Scala. given, extension, using parameters, and indentation-based Scala 3 syntax separate it from Java and Kotlin.',
+    code: `trait Encoder[A]:
+  def encode(value: A): String
+
+given Encoder[User] with
+  def encode(user: User): String = s"\${user.id}:\${user.email}"
+
+extension [A](value: A)
+  def asJson(using encoder: Encoder[A]): String =
+    encoder.encode(value)`
   }
 ];
