@@ -41,17 +41,38 @@
     { id: 'insane', label: 'Insane', description: 'Rare, legacy, academic, and esoteric' }
   ];
 
+  type ModeStats = {
+    bestScore: number;
+    bestStreak: number;
+    rounds: number;
+    answered: number;
+    correct: number;
+    misses: Record<string, number>;
+  };
+
+  type StatsByMode = Record<GameMode, ModeStats>;
+
+  type RoundAnswer = {
+    question: CodeQuestion;
+    answer: string;
+    normalizedAnswer: string;
+    correct: boolean;
+  };
+
   let mode = $state<GameMode>('normal');
   let round: CodeQuestion[] = $state([]);
   let index = $state(0);
   let score = $state(0);
   let streak = $state(0);
-  let bestScore = $state(0);
+  let bestStreakThisRound = $state(0);
   let selected = $state('');
   let textAnswer = $state('');
   let revealed = $state(false);
   let lastCorrect = $state<boolean | null>(null);
   let recentSnippetIds = $state<string[]>([]);
+  let roundAnswers = $state<RoundAnswer[]>([]);
+  let modeStats = $state<StatsByMode>(createEmptyStats());
+  let hydrated = $state(false);
 
   const current = $derived(round[index]);
   const choices = $derived(current ? buildChoices(current, mode) : []);
@@ -61,26 +82,45 @@
   const answeredValue = $derived(isInputMode ? textAnswer : selected);
   const canSubmit = $derived(answeredValue.trim().length > 0 && !revealed && Boolean(current));
   const title = $derived(scoreLabel(score, Math.max(index + (revealed ? 1 : 0), 0)));
+  const currentStats = $derived(modeStats[mode]);
+  const bestScore = $derived(Math.max(score, currentStats.bestScore));
+  const roundAccuracy = $derived(roundAnswers.length === 0 ? 0 : Math.round((score / roundAnswers.length) * 100));
+  const missedAnswers = $derived(roundAnswers.filter((answer) => !answer.correct));
+  const correctAnswers = $derived(roundAnswers.filter((answer) => answer.correct));
+  const practiceLanguages = $derived(topMissedLanguages(missedAnswers));
 
   onMount(() => {
     const storedMode = localStorage.getItem('codeguessr.mode') as GameMode | null;
     const storedBest = Number(localStorage.getItem('codeguessr.best') ?? 0);
     const storedRecent = parseRecentSnippetIds(localStorage.getItem('codeguessr.recentSnippetIds'));
+    const storedStats = parseModeStats(localStorage.getItem('codeguessr.stats'));
 
     if (storedMode && modes.some((item) => item.id === storedMode)) {
       mode = storedMode;
     }
 
-    bestScore = Number.isFinite(storedBest) ? storedBest : 0;
+    modeStats = storedStats;
+    if (Number.isFinite(storedBest) && storedBest > 0) {
+      modeStats = {
+        ...modeStats,
+        [mode]: {
+          ...modeStats[mode],
+          bestScore: Math.max(modeStats[mode].bestScore, storedBest)
+        }
+      };
+    }
+
     recentSnippetIds = storedRecent;
     startRound(storedMode ?? mode, storedRecent);
+    hydrated = true;
   });
 
   $effect(() => {
-    if (!browser) return;
+    if (!browser || !hydrated) return;
 
     localStorage.setItem('codeguessr.mode', mode);
     localStorage.setItem('codeguessr.best', String(bestScore));
+    localStorage.setItem('codeguessr.stats', JSON.stringify(modeStats));
     localStorage.setItem('codeguessr.recentSnippetIds', JSON.stringify(recentSnippetIds));
   });
 
@@ -91,23 +131,35 @@
     index = 0;
     score = 0;
     streak = 0;
+    bestStreakThisRound = 0;
     selected = '';
     textAnswer = '';
     revealed = false;
     lastCorrect = null;
+    roundAnswers = [];
   }
 
   function submitAnswer(answer = answeredValue) {
     if (!current || !answer.trim() || revealed) return;
 
     const result = checkAnswer(current, answer);
+    const normalizedAnswer = displayAnswer(answer);
     lastCorrect = result.correct;
     revealed = true;
+    roundAnswers = [
+      ...roundAnswers,
+      {
+        question: current,
+        answer,
+        normalizedAnswer,
+        correct: result.correct
+      }
+    ];
 
     if (result.correct) {
       score += 1;
       streak += 1;
-      bestScore = Math.max(bestScore, score);
+      bestStreakThisRound = Math.max(bestStreakThisRound, streak);
     } else {
       streak = 0;
     }
@@ -115,7 +167,7 @@
 
   function nextQuestion() {
     if (index + 1 >= round.length) {
-      index = round.length;
+      finishRound();
       return;
     }
 
@@ -124,6 +176,30 @@
     textAnswer = '';
     revealed = false;
     lastCorrect = null;
+  }
+
+  function finishRound() {
+    const previous = modeStats[mode];
+    const misses = { ...previous.misses };
+
+    for (const answer of roundAnswers) {
+      if (!answer.correct) {
+        misses[answer.question.language] = (misses[answer.question.language] ?? 0) + 1;
+      }
+    }
+
+    modeStats = {
+      ...modeStats,
+      [mode]: {
+        bestScore: Math.max(previous.bestScore, score),
+        bestStreak: Math.max(previous.bestStreak, bestStreakThisRound),
+        rounds: previous.rounds + 1,
+        answered: previous.answered + roundAnswers.length,
+        correct: previous.correct + score,
+        misses
+      }
+    };
+    index = round.length;
   }
 
   function highlighted(question: CodeQuestion) {
@@ -148,6 +224,70 @@
     }
 
     return String(Date.now());
+  }
+
+  function createEmptyStats(): StatsByMode {
+    return {
+      easy: createEmptyModeStats(),
+      normal: createEmptyModeStats(),
+      hard: createEmptyModeStats(),
+      insane: createEmptyModeStats()
+    };
+  }
+
+  function createEmptyModeStats(): ModeStats {
+    return {
+      bestScore: 0,
+      bestStreak: 0,
+      rounds: 0,
+      answered: 0,
+      correct: 0,
+      misses: {}
+    };
+  }
+
+  function parseModeStats(value: string | null): StatsByMode {
+    const fallback = createEmptyStats();
+    if (!value) return fallback;
+
+    try {
+      const parsed = JSON.parse(value) as Partial<Record<GameMode, Partial<ModeStats>>>;
+      return {
+        easy: normalizeModeStats(parsed.easy, fallback.easy),
+        normal: normalizeModeStats(parsed.normal, fallback.normal),
+        hard: normalizeModeStats(parsed.hard, fallback.hard),
+        insane: normalizeModeStats(parsed.insane, fallback.insane)
+      };
+    } catch {
+      return fallback;
+    }
+  }
+
+  function normalizeModeStats(value: Partial<ModeStats> | undefined, fallback: ModeStats): ModeStats {
+    return {
+      bestScore: readNumber(value?.bestScore, fallback.bestScore),
+      bestStreak: readNumber(value?.bestStreak, fallback.bestStreak),
+      rounds: readNumber(value?.rounds, fallback.rounds),
+      answered: readNumber(value?.answered, fallback.answered),
+      correct: readNumber(value?.correct, fallback.correct),
+      misses: value?.misses && typeof value.misses === 'object' ? value.misses : {}
+    };
+  }
+
+  function readNumber(value: unknown, fallback: number) {
+    return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+  }
+
+  function topMissedLanguages(answers: RoundAnswer[]) {
+    const counts = new Map<string, number>();
+
+    for (const answer of answers) {
+      counts.set(answer.question.language, (counts.get(answer.question.language) ?? 0) + 1);
+    }
+
+    return Array.from(counts.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .map(([language]) => language);
   }
 </script>
 
@@ -203,16 +343,82 @@
 
   {#if complete}
     <section class="finish-panel">
-      <Trophy size={44} aria-hidden="true" />
-      <div>
-        <p class="eyebrow">Round complete</p>
-        <h2>{title}</h2>
-        <p>You scored {score} out of {round.length}. Best local score: {bestScore}.</p>
+      <div class="finish-heading">
+        <Trophy size={44} aria-hidden="true" />
+        <div>
+          <p class="eyebrow">Round complete</p>
+          <h2>{title}</h2>
+          <p>
+            You scored {score} out of {round.length} in {mode} mode. Local best for this mode:
+            {currentStats.bestScore}.
+          </p>
+        </div>
       </div>
-      <button class="primary-action" type="button" onclick={() => startRound()}>
-        <RotateCcw size={18} aria-hidden="true" />
-        Play again
-      </button>
+
+      <div class="summary-grid" aria-label="Round summary">
+        <div>
+          <span>Accuracy</span>
+          <strong>{roundAccuracy}%</strong>
+        </div>
+        <div>
+          <span>Best streak</span>
+          <strong>{bestStreakThisRound}</strong>
+        </div>
+        <div>
+          <span>Rounds played</span>
+          <strong>{currentStats.rounds}</strong>
+        </div>
+        <div>
+          <span>Mode accuracy</span>
+          <strong>
+            {currentStats.answered === 0
+              ? '0%'
+              : `${Math.round((currentStats.correct / currentStats.answered) * 100)}%`}
+          </strong>
+        </div>
+      </div>
+
+      {#if missedAnswers.length > 0}
+        <div class="summary-section">
+          <div>
+            <p class="eyebrow">Practice next</p>
+            <h3>{practiceLanguages.join(', ')}</h3>
+          </div>
+
+          <div class="miss-list">
+            {#each missedAnswers as answer}
+              <article>
+                <span>{answer.question.language}</span>
+                <p>
+                  Your answer: <strong>{answer.normalizedAnswer || answer.answer}</strong>
+                </p>
+                <small>{answer.question.discriminators.slice(0, 3).join(' / ')}</small>
+              </article>
+            {/each}
+          </div>
+        </div>
+      {:else}
+        <div class="summary-section clean-round">
+          <p class="eyebrow">No weak spots</p>
+          <h3>Clean round. Every fingerprint landed.</h3>
+        </div>
+      {/if}
+
+      <div class="summary-section">
+        <p class="eyebrow">Answered</p>
+        <div class="answer-history">
+          {#each roundAnswers as answer}
+            <span class:missed={!answer.correct}>{answer.question.language}</span>
+          {/each}
+        </div>
+      </div>
+
+      <div class="finish-actions">
+        <button class="primary-action" type="button" onclick={() => startRound()}>
+          <RotateCcw size={18} aria-hidden="true" />
+          Play again
+        </button>
+      </div>
     </section>
   {:else if current}
     <section class="game-grid">
