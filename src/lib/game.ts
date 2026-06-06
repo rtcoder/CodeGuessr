@@ -1,6 +1,6 @@
 import { canonicalLanguage, matchesLanguage } from './languages';
-import { questions } from './questions';
-import type { AnswerResult, GameMode, Question } from './types';
+import { questions } from './data/questions';
+import type { AnswerResult, CodeQuestion, GameMode } from './types';
 
 const roundSize = 10;
 
@@ -17,14 +17,14 @@ export function questionsForMode(mode: GameMode) {
     return questions.filter((question) => question.difficulty !== 'easy' && question.difficulty !== 'insane');
   }
 
-  return questions.filter((question) => question.difficulty === 'normal' || question.difficulty === 'hard');
+  return questions.filter((question) => question.difficulty === 'medium' || question.difficulty === 'hard');
 }
 
 export function createRound(mode: GameMode) {
   return shuffle(questionsForMode(mode)).slice(0, roundSize);
 }
 
-export function buildChoices(question: Question, mode: GameMode) {
+export function buildChoices(question: CodeQuestion, mode: GameMode) {
   const pool =
     mode === 'easy'
       ? unique([...question.confusionGroup, ...questions.map((item) => item.language)])
@@ -34,7 +34,7 @@ export function buildChoices(question: Question, mode: GameMode) {
   return shuffle([question.language, ...wrongAnswers]);
 }
 
-export function checkAnswer(question: Question, answer: string): AnswerResult {
+export function checkAnswer(question: CodeQuestion, answer: string): AnswerResult {
   return {
     correct: matchesLanguage(answer, question.language),
     expected: question.language

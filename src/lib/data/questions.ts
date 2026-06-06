@@ -1,14 +1,19 @@
-import type { Question } from './types';
+import type { CodeQuestion } from '../types';
 
-export const questions: Question[] = [
+export const questions: CodeQuestion[] = [
   {
     id: 'csharp-linq-active-users',
     language: 'C#',
-    grammar: 'csharp',
-    difficulty: 'normal',
+    aliases: ['c#', 'csharp', 'cs', 'c-sharp'],
+    difficulty: 'medium',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'csharp',
     confusionGroup: ['Java', 'Kotlin', 'TypeScript', 'F#'],
     discriminators: ['using System.Linq', 'LINQ extension methods', 'Console.WriteLine'],
-    snippet: `using System;
+    explanation:
+      'This is C#. LINQ extension methods, using System.Linq, and Console.WriteLine distinguish it from Java, Kotlin, and TypeScript.',
+    code: `using System;
 using System.Linq;
 
 var activeNames = users
@@ -21,11 +26,16 @@ Console.WriteLine(string.Join(", ", activeNames));`
   {
     id: 'rust-match-option',
     language: 'Rust',
-    grammar: 'rust',
-    difficulty: 'normal',
+    aliases: ['rust', 'rs'],
+    difficulty: 'medium',
+    category: 'systems',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'rust',
     confusionGroup: ['Go', 'Swift', 'C++', 'Haskell'],
     discriminators: ['Option<T>', 'match', 'Some/None variants', 'println! macro'],
-    snippet: `fn describe_port(port: Option<u16>) -> String {
+    explanation:
+      'This is Rust. Option, Some/None variants, match arms, format!, and println! are strong Rust fingerprints.',
+    code: `fn describe_port(port: Option<u16>) -> String {
     match port {
         Some(443) => "secure".to_string(),
         Some(value) => format!("custom:{value}"),
@@ -38,11 +48,16 @@ println!("{}", describe_port(Some(8080)));`
   {
     id: 'go-context-defer',
     language: 'Go',
-    grammar: 'go',
-    difficulty: 'normal',
+    aliases: ['go', 'golang'],
+    difficulty: 'medium',
+    category: 'systems',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'go',
     confusionGroup: ['Rust', 'Java', 'C', 'Kotlin'],
     discriminators: ['package main', 'context.WithTimeout', 'defer cancel()', 'select over channel cases'],
-    snippet: `package main
+    explanation:
+      'This is Go. package declarations, func syntax, defer, channels, and select cases are Go-specific fingerprints.',
+    code: `package main
 
 import (
     "context"
@@ -64,11 +79,16 @@ func fetchWithTimeout(done <-chan string) string {
   {
     id: 'kotlin-sealed-when',
     language: 'Kotlin',
-    grammar: 'kotlin',
-    difficulty: 'normal',
+    aliases: ['kotlin', 'kt'],
+    difficulty: 'medium',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'kotlin',
     confusionGroup: ['Java', 'Scala', 'Swift', 'C#'],
     discriminators: ['sealed interface', 'data class', 'when expression', 'is type checks'],
-    snippet: `sealed interface PaymentEvent
+    explanation:
+      'This is Kotlin. sealed interface, data class, object singleton, and exhaustive when are strong Kotlin clues.',
+    code: `sealed interface PaymentEvent
 data class Captured(val cents: Int) : PaymentEvent
 object Failed : PaymentEvent
 
@@ -81,11 +101,16 @@ fun label(event: PaymentEvent): String =
   {
     id: 'swift-guard-enum',
     language: 'Swift',
-    grammar: 'swift',
-    difficulty: 'normal',
+    aliases: ['swift'],
+    difficulty: 'medium',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'swift',
     confusionGroup: ['Kotlin', 'Rust', 'Objective-C', 'TypeScript'],
     discriminators: ['guard let', 'enum cases with associated values', 'switch with case let'],
-    snippet: `enum Route {
+    explanation:
+      'This is Swift. guard let, enum cases with associated values, switch pattern matching, and string interpolation with backslash parentheses identify it.',
+    code: `enum Route {
     case user(id: Int)
     case search(term: String)
 }
@@ -104,11 +129,16 @@ func render(_ route: Route?) -> String {
   {
     id: 'ruby-block-symbol-to-proc',
     language: 'Ruby',
-    grammar: 'ruby',
+    aliases: ['ruby', 'rb'],
     difficulty: 'easy',
+    category: 'scripting',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'ruby',
     confusionGroup: ['Python', 'Perl', 'Crystal', 'Elixir'],
     discriminators: ['symbol keys', 'select block', '&:name symbol-to-proc', 'puts'],
-    snippet: `active_names = users
+    explanation:
+      'This is Ruby. Block parameters between pipes, symbols like :active, &:name, and puts are Ruby fingerprints.',
+    code: `active_names = users
   .select { |user| user[:active] }
   .map(&:name)
   .uniq
@@ -118,11 +148,16 @@ puts active_names.join(", ")`
   {
     id: 'python-dataclass-match',
     language: 'Python',
-    grammar: 'python',
+    aliases: ['python', 'py', 'python3'],
     difficulty: 'easy',
+    category: 'popular',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'python',
     confusionGroup: ['Ruby', 'Julia', 'JavaScript', 'Lua'],
     discriminators: ['dataclass decorator', 'match/case', 'f-string'],
-    snippet: `from dataclasses import dataclass
+    explanation:
+      'This is Python. The dataclass decorator, indentation, match/case syntax, and f-string point to modern Python.',
+    code: `from dataclasses import dataclass
 
 @dataclass
 class Point:
@@ -139,11 +174,16 @@ def describe(point: Point) -> str:
   {
     id: 'typescript-satisfies-record',
     language: 'TypeScript',
-    grammar: 'typescript',
-    difficulty: 'normal',
+    aliases: ['typescript', 'ts'],
+    difficulty: 'medium',
+    category: 'web',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'typescript',
     confusionGroup: ['JavaScript', 'Kotlin', 'C#', 'Flow'],
     discriminators: ['type alias', 'Record generic', 'satisfies operator', 'optional chaining'],
-    snippet: `type Role = "admin" | "viewer";
+    explanation:
+      'This is TypeScript. A string-literal union type, Record<Role, string[]>, and the satisfies operator separate it from plain JavaScript.',
+    code: `type Role = "admin" | "viewer";
 
 const permissions = {
   admin: ["deploy", "invite"],
@@ -157,11 +197,16 @@ export function can(role: Role, action: string) {
   {
     id: 'elixir-pipe-pattern',
     language: 'Elixir',
-    grammar: 'elixir',
+    aliases: ['elixir', 'ex'],
     difficulty: 'hard',
+    category: 'functional',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'elixir',
     confusionGroup: ['Erlang', 'Ruby', 'Clojure', 'F#'],
     discriminators: ['defmodule', 'pipe operator', 'pattern-matched function heads', 'Enum module'],
-    snippet: `defmodule AuditTrail do
+    explanation:
+      'This is Elixir. defmodule, the pipe operator, atom tuples, match?, and Enum pipelines are characteristic Elixir features.',
+    code: `defmodule AuditTrail do
   def summarize(events) do
     events
     |> Enum.filter(&match?({:ok, _}, &1))
@@ -173,11 +218,16 @@ end`
   {
     id: 'haskell-guards-maybe',
     language: 'Haskell',
-    grammar: 'haskell',
+    aliases: ['haskell', 'hs'],
     difficulty: 'hard',
+    category: 'functional',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'haskell',
     confusionGroup: ['F#', 'OCaml', 'PureScript', 'Elm'],
     discriminators: ['type signature', 'Maybe', 'guards', 'pattern matching'],
-    snippet: `scoreLabel :: Maybe Int -> String
+    explanation:
+      'This is Haskell. The :: type signature, Maybe/Just/Nothing, pattern-matched equations, and guards identify it.',
+    code: `scoreLabel :: Maybe Int -> String
 scoreLabel Nothing = "missing"
 scoreLabel (Just score)
   | score >= 90 = "excellent"
@@ -187,11 +237,16 @@ scoreLabel (Just score)
   {
     id: 'php-match-nullsafe',
     language: 'PHP',
-    grammar: 'php',
+    aliases: ['php'],
     difficulty: 'easy',
+    category: 'web',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'php',
     confusionGroup: ['JavaScript', 'Hack', 'Perl', 'Ruby'],
     discriminators: ['<?php tag', 'nullsafe operator', 'match expression', 'array arrow syntax'],
-    snippet: `<?php
+    explanation:
+      'This is PHP. The <?php opening tag, $ variables, nullsafe operator, match expression, and array arrow syntax are PHP clues.',
+    code: `<?php
 
 $tier = match ($user?->plan()) {
     "pro" => ["limit" => 5000],
@@ -204,11 +259,16 @@ echo $tier["limit"];`
   {
     id: 'scala-case-class-fold',
     language: 'Scala',
-    grammar: 'scala',
+    aliases: ['scala'],
     difficulty: 'hard',
+    category: 'functional',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'scala',
     confusionGroup: ['Kotlin', 'Haskell', 'F#', 'Java'],
     discriminators: ['case class', 'Option.fold', 'for comprehension', 'yield'],
-    snippet: `case class User(id: Long, email: Option[String])
+    explanation:
+      'This is Scala. case class, Option-style values, for comprehensions, yield, and collection chaining distinguish it from Java and Kotlin.',
+    code: `case class User(id: Long, email: Option[String])
 
 val domains =
   for
@@ -221,11 +281,16 @@ println(domains.groupBy(identity).view.mapValues(_.size))`
   {
     id: 'cobol-perform-varying',
     language: 'COBOL',
-    grammar: 'cobol',
+    aliases: ['cobol'],
     difficulty: 'insane',
+    category: 'legacy',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'cobol',
     confusionGroup: ['Fortran', 'Ada', 'PL/I', 'BASIC'],
     discriminators: ['IDENTIFICATION DIVISION', 'PERFORM VARYING', 'DISPLAY', 'PIC clauses'],
-    snippet: `IDENTIFICATION DIVISION.
+    explanation:
+      'This is COBOL. IDENTIFICATION DIVISION, PIC clauses, DISPLAY, and PERFORM VARYING are classic COBOL markers.',
+    code: `IDENTIFICATION DIVISION.
 PROGRAM-ID. ACTIVE-USERS.
 DATA DIVISION.
 WORKING-STORAGE SECTION.
@@ -240,11 +305,16 @@ PROCEDURE DIVISION.
   {
     id: 'prolog-recursive-rule',
     language: 'Prolog',
-    grammar: 'prolog',
+    aliases: ['prolog', 'pl'],
     difficulty: 'insane',
+    category: 'academic',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'prolog',
     confusionGroup: ['Datalog', 'Erlang', 'Mercury', 'Haskell'],
     discriminators: ['facts and rules', ':- operator', 'recursive predicate', 'capitalized variables'],
-    snippet: `parent(ada, grace).
+    explanation:
+      'This is Prolog. Facts, rules with :- and capitalized logic variables are its core syntax fingerprints.',
+    code: `parent(ada, grace).
 parent(grace, linus).
 
 ancestor(X, Y) :-
@@ -256,11 +326,16 @@ ancestor(X, Y) :-
   {
     id: 'forth-stack-words',
     language: 'Forth',
-    grammar: 'forth',
+    aliases: ['forth'],
     difficulty: 'insane',
+    category: 'esoteric',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'forth',
     confusionGroup: ['PostScript', 'Factor', 'Joy', 'Assembly'],
     discriminators: ['colon word definition', 'stack operators', 'postfix arithmetic', '. output word'],
-    snippet: `: square dup * ;
+    explanation:
+      'This is Forth. Colon definitions, stack words like dup and swap, postfix arithmetic, and dot output are Forth fingerprints.',
+    code: `: square dup * ;
 : hypotenuse-squared
   square swap square + ;
 
@@ -269,11 +344,16 @@ ancestor(X, Y) :-
   {
     id: 'tla-plus-action',
     language: 'TLA+',
-    grammar: 'tla',
+    aliases: ['tla+', 'tla', 'tlaplus'],
     difficulty: 'insane',
+    category: 'academic',
+    quizSuitability: 'excellent',
+    highlightLanguage: 'tla',
     confusionGroup: ['Alloy', 'Coq/Rocq', 'Lean', 'Z notation'],
     discriminators: ['MODULE header', 'VARIABLES', '/\\ conjunction', "primed variable state updates"],
-    snippet: `---- MODULE Counter ----
+    explanation:
+      "This is TLA+. MODULE headers, VARIABLES, temporal-spec operators, and primed next-state variables are TLA+ fingerprints.",
+    code: `---- MODULE Counter ----
 VARIABLES count
 
 Init == count = 0

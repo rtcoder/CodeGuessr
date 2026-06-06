@@ -7,7 +7,9 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "validate:data": "node --experimental-strip-types scripts/validate-data.mjs",
+    "coverage:data": "node --experimental-strip-types scripts/coverage-report.mjs"
   },
   "dependencies": {
     "@sveltejs/kit": "^2.0.0",

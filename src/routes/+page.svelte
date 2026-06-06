@@ -24,7 +24,7 @@
   import 'prismjs/components/prism-verilog';
   import { browser } from '$app/environment';
   import { buildChoices, checkAnswer, createRound, displayAnswer, scoreLabel } from '$lib/game';
-  import type { GameMode, Question } from '$lib/types';
+  import type { CodeQuestion, GameMode } from '$lib/types';
 
   const modes: { id: GameMode; label: string; description: string }[] = [
     { id: 'easy', label: 'Easy', description: 'Four choices, lighter distractors' },
@@ -34,7 +34,7 @@
   ];
 
   let mode = $state<GameMode>('normal');
-  let round: Question[] = $state([]);
+  let round: CodeQuestion[] = $state([]);
   let index = $state(0);
   let score = $state(0);
   let streak = $state(0);
@@ -115,9 +115,9 @@
     lastCorrect = null;
   }
 
-  function highlighted(question: Question) {
-    const grammar = Prism.languages[question.grammar] ?? Prism.languages.clike;
-    return Prism.highlight(question.snippet, grammar, question.grammar);
+  function highlighted(question: CodeQuestion) {
+    const grammar = Prism.languages[question.highlightLanguage] ?? Prism.languages.clike;
+    return Prism.highlight(question.code, grammar, question.highlightLanguage);
   }
 </script>
 
@@ -194,7 +194,7 @@
         <div class="progress-track" aria-hidden="true">
           <span style={`width: ${progress}%`}></span>
         </div>
-        <pre aria-label="Code snippet"><code class={`language-${current.grammar}`}>{@html highlighted(current)}</code></pre>
+        <pre aria-label="Code snippet"><code class={`language-${current.highlightLanguage}`}>{@html highlighted(current)}</code></pre>
       </article>
 
       <aside class="answer-panel">
@@ -246,6 +246,7 @@
             {#if isInputMode && !lastCorrect}
               <span>Your answer normalized to {displayAnswer(textAnswer) || 'nothing'}.</span>
             {/if}
+            <span>{current.explanation}</span>
             <ul>
               {#each current.discriminators as clue}
                 <li>{clue}</li>
