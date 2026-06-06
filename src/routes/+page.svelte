@@ -23,7 +23,15 @@
   import 'prismjs/components/prism-prolog';
   import 'prismjs/components/prism-verilog';
   import { browser } from '$app/environment';
-  import { buildChoices, checkAnswer, createRound, displayAnswer, scoreLabel } from '$lib/game';
+  import { onMount } from 'svelte';
+  import {
+    buildChoices,
+    checkAnswer,
+    createRound,
+    displayAnswer,
+    rememberRecentSnippetIds,
+    scoreLabel
+  } from '$lib/game';
   import type { CodeQuestion, GameMode } from '$lib/types';
 
   const modes: { id: GameMode; label: string; description: string }[] = [
@@ -43,6 +51,7 @@
   let textAnswer = $state('');
   let revealed = $state(false);
   let lastCorrect = $state<boolean | null>(null);
+  let recentSnippetIds = $state<string[]>([]);
 
   const current = $derived(round[index]);
   const choices = $derived(current ? buildChoices(current, mode) : []);
@@ -53,18 +62,18 @@
   const canSubmit = $derived(answeredValue.trim().length > 0 && !revealed && Boolean(current));
   const title = $derived(scoreLabel(score, Math.max(index + (revealed ? 1 : 0), 0)));
 
-  $effect(() => {
-    if (!browser) return;
-
+  onMount(() => {
     const storedMode = localStorage.getItem('codeguessr.mode') as GameMode | null;
     const storedBest = Number(localStorage.getItem('codeguessr.best') ?? 0);
+    const storedRecent = parseRecentSnippetIds(localStorage.getItem('codeguessr.recentSnippetIds'));
 
     if (storedMode && modes.some((item) => item.id === storedMode)) {
       mode = storedMode;
     }
 
     bestScore = Number.isFinite(storedBest) ? storedBest : 0;
-    startRound(storedMode ?? mode);
+    recentSnippetIds = storedRecent;
+    startRound(storedMode ?? mode, storedRecent);
   });
 
   $effect(() => {
@@ -72,11 +81,13 @@
 
     localStorage.setItem('codeguessr.mode', mode);
     localStorage.setItem('codeguessr.best', String(bestScore));
+    localStorage.setItem('codeguessr.recentSnippetIds', JSON.stringify(recentSnippetIds));
   });
 
-  function startRound(nextMode = mode) {
+  function startRound(nextMode = mode, recentIds = recentSnippetIds) {
     mode = nextMode;
-    round = createRound(nextMode);
+    round = createRound(nextMode, recentIds, createRoundSeed());
+    recentSnippetIds = rememberRecentSnippetIds(recentIds, round);
     index = 0;
     score = 0;
     streak = 0;
@@ -118,6 +129,25 @@
   function highlighted(question: CodeQuestion) {
     const grammar = Prism.languages[question.highlightLanguage] ?? Prism.languages.clike;
     return Prism.highlight(question.code, grammar, question.highlightLanguage);
+  }
+
+  function parseRecentSnippetIds(value: string | null) {
+    if (!value) return [];
+
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === 'string') : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function createRoundSeed() {
+    if (browser && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    return String(Date.now());
   }
 </script>
 
