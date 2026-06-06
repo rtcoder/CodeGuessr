@@ -1,5 +1,6 @@
 <script lang="ts">
   import CheckCircle from 'lucide-svelte/icons/check-circle';
+  import BookOpen from 'lucide-svelte/icons/book-open';
   import ChevronRight from 'lucide-svelte/icons/chevron-right';
   import Keyboard from 'lucide-svelte/icons/keyboard';
   import ListChecks from 'lucide-svelte/icons/list-checks';
@@ -306,18 +307,25 @@
       <h1>Guess the language by its code fingerprint.</h1>
     </div>
 
-    <div class="score-strip">
-      <div>
-        <span>Score</span>
-        <strong>{score}/{round.length || 10}</strong>
-      </div>
-      <div>
-        <span>Streak</span>
-        <strong>{streak}</strong>
-      </div>
-      <div>
-        <span>Best</span>
-        <strong>{bestScore}</strong>
+    <div class="topbar-actions">
+      <a class="secondary-action catalog-link" href="/snippets">
+        <BookOpen size={18} aria-hidden="true" />
+        Snippets
+      </a>
+
+      <div class="score-strip">
+        <div>
+          <span>Score</span>
+          <strong>{score}/{round.length || 10}</strong>
+        </div>
+        <div>
+          <span>Streak</span>
+          <strong>{streak}</strong>
+        </div>
+        <div>
+          <span>Best</span>
+          <strong>{bestScore}</strong>
+        </div>
       </div>
     </div>
   </section>
