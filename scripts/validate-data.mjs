@@ -1,4 +1,6 @@
-import { questions } from '../src/lib/data/questions.ts';
+import { loadQuestions } from './load-questions.mjs';
+
+const questions = await loadQuestions();
 
 const difficulties = new Set(['easy', 'medium', 'hard', 'insane']);
 const categories = new Set([
@@ -21,7 +23,9 @@ const plannedDistractors = new Set([
   'Ada',
   'Alloy',
   'Assembly',
+  'AWK',
   'BASIC',
+  'Batch',
   'C',
   'C++',
   'Coq/Rocq',
@@ -45,11 +49,26 @@ const plannedDistractors = new Set([
   'Nim',
   'OCaml',
   'Objective-C',
+  'Objective-C++',
+  'Octave',
   'PL/I',
+  'PL/SQL',
   'Perl',
   'PostScript',
   'PureScript',
   'Clojure',
+  'Common Lisp',
+  'Cypher',
+  'fish',
+  'Racket',
+  'ReasonML',
+  'SAS',
+  'Scheme',
+  'Standard ML',
+  'T-SQL',
+  'tcsh/csh',
+  'VBScript',
+  'XQuery',
   'Z notation',
   'Zig'
 ]);

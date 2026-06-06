@@ -1,4 +1,6 @@
-import { questions } from '../src/lib/data/questions.ts';
+import { loadQuestions } from './load-questions.mjs';
+
+const questions = await loadQuestions();
 
 const byLanguage = groupBy(questions, (question) => question.language);
 const byDifficulty = groupBy(questions, (question) => question.difficulty);
