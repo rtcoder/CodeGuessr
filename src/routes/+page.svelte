@@ -24,6 +24,7 @@
   import 'prismjs/components/prism-prolog';
   import 'prismjs/components/prism-verilog';
   import { browser } from '$app/environment';
+  import { base } from '$app/paths';
   import { onMount } from 'svelte';
   import {
     buildChoices,
@@ -308,7 +309,7 @@
     </div>
 
     <div class="topbar-actions">
-      <a class="secondary-action catalog-link" href="/snippets">
+      <a class="secondary-action catalog-link" href={`${base}/snippets`}>
         <BookOpen size={18} aria-hidden="true" />
         Snippets
       </a>

@@ -16,6 +16,7 @@
   import 'prismjs/components/prism-cobol';
   import 'prismjs/components/prism-prolog';
   import 'prismjs/components/prism-verilog';
+  import { base } from '$app/paths';
   import { questions } from '$lib/data/questions';
   import type { CodeQuestion } from '$lib/types';
 
@@ -61,7 +62,7 @@
       <p>{languageGroups.length} languages, {questions.length} snippets.</p>
     </div>
 
-    <a class="secondary-action" href="/">
+    <a class="secondary-action" href={`${base}/`}>
       <ArrowLeft size={18} aria-hidden="true" />
       Back to quiz
     </a>
