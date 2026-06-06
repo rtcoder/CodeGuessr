@@ -32,6 +32,7 @@ const plannedDistractors = new Set([
   'Crystal',
   'Dart',
   'Datalog',
+  'Dhall',
   'Elm',
   'Emacs Lisp',
   'Erlang',
@@ -49,6 +50,7 @@ const plannedDistractors = new Set([
   'Lua',
   'LiveScript',
   'Mercury',
+  'Meson',
   'Modula-2',
   'Move',
   'Nim',
@@ -70,6 +72,7 @@ const plannedDistractors = new Set([
   'ReasonML',
   'SAS',
   'Scheme',
+  'Smalltalk',
   'Standard ML',
   'T-SQL',
   'tcsh/csh',
@@ -78,6 +81,8 @@ const plannedDistractors = new Set([
   'Vyper',
   'WGSL',
   'XQuery',
+  'X10',
+  'YAML',
   'Z notation',
   'Zig'
 ]);
